@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: routes-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: routes-api
+  template:
+    metadata:
+      labels:
+        app: routes-api
+    spec:
+      containers:
+        - name: routes-api
+          image: 1mamute/routes-api:latest
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: routes-api-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: routes-api
+  ports:
+  - port: 3000

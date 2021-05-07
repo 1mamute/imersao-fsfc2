@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  frontend:
+    image: front-end:latest
+    restart: always
+    build: ./frontend/
+    container_name: frontend
+    ports:
+      - 3001:3000
+    networks:
+      - app-network
+    depends_on:
+      - routes-api
+
+  routes-api:
+    image: routes-api:latest
+    restart: always
+    build: ./routes-api/
+    container_name: routes-api
+    ports:
+      - 3000:3000
+    networks:
+      - app-network
+      - database-network
+
+  mongodb:
+    image: mongo:latest
+    restart: always
+    env_file: ./mongodb/.env
+    build: ./mongodb/
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    networks:
+      - database-network
+    depends_on:
+      - routes-api
+
+networks:
+  app-network:
+  database-network:
